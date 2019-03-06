@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="7dp">
+
+    <android.support.design.widget.FloatingActionButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/back"
+        android:id="@+id/back_btn"
+        android:backgroundTint="@android:color/white"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="right"
+        android:layout_marginBottom="10dp"
+        android:orientation="vertical"
+        android:background="@drawable/bg_layout_white_with_round_corner">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/black"
+            android:textSize="15sp"
+            android:id="@+id/origin_address"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/textColor"
+            android:textSize="10sp"
+            android:id="@+id/origin_area"
+            />
+
+        <View
+            style="@style/slimeLine"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/black"
+            android:textSize="15sp"
+            android:id="@+id/destination_address"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/textColor"
+            android:textSize="10sp"
+            android:id="@+id/destination_area"
+            />
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:background="@drawable/bg_layout_corner_round"
+            android:id="@+id/destination_confrim_layout">
+        <TextView
+            android:id="@+id/confirm_destination_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="تایید مقصد"
+            android:textSize="16sp"
+            android:textColor="@android:color/white"
+            android:padding="7dp"/>
+    </LinearLayout>
+
+
+</LinearLayout>
