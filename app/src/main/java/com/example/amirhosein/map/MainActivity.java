@@ -10,6 +10,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.amirhosein.map.model.AddressResponse;
@@ -24,12 +26,16 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.gson.Gson;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class MainActivity extends AppCompatActivity
         implements GoogleMap.OnMapClickListener, GoogleMap.OnMarkerClickListener {
     private GoogleMap mMap;
     private LatLng myLatLng;
     private Boolean myLocationReaded = false;
-
+    @BindView(R.id.ic_pin)
+    ImageView imgPin;
     //    private Marker myLocationMarker;
     private boolean setMylocationMarker = false;
 
@@ -44,7 +50,7 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        ButterKnife.bind(this);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
 
             if (checkSelfPermission(android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -99,13 +105,13 @@ public class MainActivity extends AppCompatActivity
 
     public void setOriginData(AddressResponse addressResponse) {
         originMode = false;
+        imgPin.setImageDrawable(getResources().getDrawable(R.drawable.ic_destination_pin));
         final BitmapDescriptor icon = BitmapDescriptorFactory.fromResource(R.drawable.marker);
         destinationFragment = new DestinationFragment();
         mMap.addMarker(new MarkerOptions()
                 .position(new LatLng(Double.valueOf(addressResponse.getLat()), Double.valueOf(addressResponse.getLon())))
                 .title("Origin Location")
                 .icon(icon));
-        focusOnMyLocation();
         Bundle bundle = new Bundle();
         bundle.putString("originData", new Gson().toJson(addressResponse));
         addFragment(destinationFragment, "destination", bundle);
@@ -119,7 +125,6 @@ public class MainActivity extends AppCompatActivity
                 .position(new LatLng(Double.valueOf(addressResponse.getLat()), Double.valueOf(addressResponse.getLon())))
                 .title("Origin Location")
                 .icon(icon));
-        focusOnMyLocation();
     }
 
     public void popFragment() {
@@ -130,10 +135,16 @@ public class MainActivity extends AppCompatActivity
             fm = getSupportFragmentManager();
             fm.popBackStack();
             originMode = true;
+            imgPin.setImageDrawable(getResources().getDrawable(R.drawable.ic_origin_pin));
             mMap.clear();
             originFragment.getAddress(mMap.getCameraPosition().target);
         }
 
+    }
+
+    @Override
+    public boolean onMarkerClick(Marker marker) {
+        return false;
     }
 
 
@@ -149,31 +160,10 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onMapClick(LatLng latLng) {
-        /*final BitmapDescriptor icon = BitmapDescriptorFactory.fromResource(R.drawable.marker);
-        if (myLocationMarker != null) {
-            myLocationMarker.remove();
-            myLocationMarker = mMap.addMarker(new MarkerOptions()
-                    .position(latLng)
-                    .title("My Location")
-                    .icon(icon));
-
-
-
-        }*/
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 17), 1000, null);
 
     }
 
-    @Override
-    public boolean onMarkerClick(Marker marker) {
-        /*if (marker.equals(myLocationMarker)) {
-            if (onMyLocationMarkerClick != null)
-                onMyLocationMarkerClick.onClick();
-            return false;
-        }*/
-
-        return false;
-    }
 
 
     public void setUpMapIfNeeded() {
@@ -203,7 +193,6 @@ public class MainActivity extends AppCompatActivity
             mMap.setMyLocationEnabled(true);
 
 
-//            final BitmapDescriptor icon = BitmapDescriptorFactory.fromResource(R.drawable.marker);
 
             mMap.setOnMyLocationChangeListener(new GoogleMap.OnMyLocationChangeListener() {
                 @Override
@@ -214,10 +203,6 @@ public class MainActivity extends AppCompatActivity
                             myLatLng = new LatLng(location.getLatitude(),
                                     location.getLongitude());
 
-                            /*myLocationMarker = mMap.addMarker(new MarkerOptions()
-                                    .position(myLatLng)
-                                    .title("My Location")
-                                    .icon(icon));*/
                             mMap.setOnCameraIdleListener(new GoogleMap.OnCameraIdleListener() {
                                 @Override
                                 public void onCameraIdle() {
@@ -229,8 +214,6 @@ public class MainActivity extends AppCompatActivity
                             });
                             focusOnMyLocation();
 
-                        } else {
-                            setMyLocationMarker();
                         }
                     }
 
@@ -241,17 +224,6 @@ public class MainActivity extends AppCompatActivity
     }
 
 
-    private void setMyLocationMarker() {
-        /*if (myLocationMarker != null) {
-            myLocationMarker.remove();
-        }*/
-        /*myLocationMarker = mMap.addMarker(new MarkerOptions()
-                .position(new LatLng(myLatitude, myLongitude))
-                .title("My Location")
-                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN)));
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(myLatitude, myLongitude), 17), 1000, null);*/
-
-    }
 
     public void focusOnMyLocation() {
 

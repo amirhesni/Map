@@ -15,6 +15,8 @@ import retrofit2.Response;
  */
 
 public class OriginPresenter extends BasePresenter<OriginView> {
+    Call<AddressResponse> call;
+
     public OriginPresenter(OriginView view) {
         super(view);
     }
@@ -40,7 +42,10 @@ public class OriginPresenter extends BasePresenter<OriginView> {
         queryMap.put("lat", latLng.latitude);
         queryMap.put("lon", latLng.longitude);
 
-        retrofitInterface.getAddress(queryMap).enqueue(new Callback<AddressResponse>() {
+        checkIfIsCompilted();
+
+        call = retrofitInterface.getAddress(queryMap);
+        call.enqueue(new Callback<AddressResponse>() {
             @Override
             public void onResponse(Call<AddressResponse> call, Response<AddressResponse> response) {
                 if (response.isSuccessful()) {
@@ -57,6 +62,10 @@ public class OriginPresenter extends BasePresenter<OriginView> {
         });
 
     }
-
+    private void checkIfIsCompilted() {
+        if (call!=null && !call.isExecuted()){
+            call.cancel();
+        }
+    }
 
 }

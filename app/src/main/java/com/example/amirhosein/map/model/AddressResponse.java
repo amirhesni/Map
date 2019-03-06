@@ -9,7 +9,7 @@ import java.util.List;
  * Created by amirhosein on 3/6/2019.
  */
 
-public class AddressResponse {
+public class    AddressResponse {
 
     @SerializedName("place_id")
     @Expose
